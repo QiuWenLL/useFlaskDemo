@@ -17,5 +17,7 @@ appbuilder = AppBuilder(app, db.session)
 from . import views
 from .api.device_api import DeviceApi
 from .api.hello_api import HelloApi
+from .api.auth_api import AuthApi
 appbuilder.add_api(DeviceApi)
 appbuilder.add_api(HelloApi)
+appbuilder.add_api(AuthApi)
