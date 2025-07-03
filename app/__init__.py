@@ -3,6 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_appbuilder import AppBuilder, SQLA
 from flask_appbuilder.api import BaseApi, expose
+from flask_migrate import Migrate
 
 logging.basicConfig(format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
 logging.getLogger().setLevel(logging.DEBUG)
@@ -13,11 +14,14 @@ app.config.from_object("config")
 
 db = SQLA(app)
 appbuilder = AppBuilder(app, db.session)
+migrate = Migrate(app, db)
 
 from . import views
 from .api.device_api import DeviceApi
 from .api.hello_api import HelloApi
 from .api.auth_api import AuthApi
+from .api.user_log_api import UserLogApi
 appbuilder.add_api(DeviceApi)
 appbuilder.add_api(HelloApi)
 appbuilder.add_api(AuthApi)
+appbuilder.add_api(UserLogApi)
