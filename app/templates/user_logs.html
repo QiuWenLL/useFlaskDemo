@@ -1,0 +1,49 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>用户日志查询</h2>
+    <form id="logQueryForm">
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" class="form-control" id="username" placeholder="可选">
+        </div>
+        <div class="form-group">
+            <label for="action">操作类型</label>
+            <select class="form-control" id="action">
+                <option value="">全部</option>
+                <option value="login">登录</option>
+                <option value="logout">登出</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">查询</button>
+    </form>
+    <div id="logResults" class="mt-4"></div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#logQueryForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/api/userlog/query',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                username: $('#username').val(),
+                action: $('#action').val()
+            }),
+            success: function(data) {
+                // 处理返回的日志数据
+                let html = '<table class="table"><tr><th>用户名</th><th>操作</th><th>IP</th><th>时间</th></tr>';
+                data.data.logs.forEach(log => {
+                    html += `<tr><td>${log.username}</td><td>${log.action}</td><td>${log.ip}</td><td>${log.log_time}</td></tr>`;
+                });
+                html += '</table>';
+                $('#logResults').html(html);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
