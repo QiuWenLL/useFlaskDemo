@@ -1,50 +1,39 @@
 from flask import render_template
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from flask_appbuilder import ModelView, ModelRestApi
-
+from .models import UserLog
 from . import appbuilder, db
 
-"""
-    Create your Model based REST API::
-
-    class MyModelApi(ModelRestApi):
-        datamodel = SQLAInterface(MyModel)
-
-    appbuilder.add_api(MyModelApi)
-
-
-    Create your Views::
-
-
-    class MyModelView(ModelView):
-        datamodel = SQLAInterface(MyModel)
-
-
-    Next, register your Views::
-
-
-    appbuilder.add_view(
-        MyModelView,
-        "My View",
-        icon="fa-folder-open-o",
-        category="My Category",
-        category_icon='fa-envelope'
-    )
-"""
-
-"""
-    Application wide 404 error handler
-"""
-
+class UserLogView(ModelView):
+    """用户日志视图"""
+    datamodel = SQLAInterface(UserLog)
+    route_base = "/userlogs"
+    list_columns = ['username', 'action', 'ip', 'log_time']
+    show_fieldsets = [
+        ('Summary', {'fields': ['username', 'action']}),
+        ('Details', {'fields': ['ip', 'log_time'], 'expanded': True})
+    ]
 
 @appbuilder.app.errorhandler(404)
 def page_not_found(e):
+    """
+    全局404错误处理
+    """
     return (
         render_template(
-            "404.html", base_template=appbuilder.base_template, appbuilder=appbuilder
+            "404.html", 
+            base_template=appbuilder.base_template, 
+            appbuilder=appbuilder
         ),
         404,
     )
 
+# 注册视图
+appbuilder.add_view(
+    UserLogView,
+    "用户日志",
+    icon="fa-book",
+    category="日志管理"
+)
 
 db.create_all()

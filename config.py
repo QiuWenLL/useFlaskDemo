@@ -12,6 +12,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Your App secret key
 SECRET_KEY = "12345678901234567890"
 
+# Internationalization
+BABEL_DEFAULT_LOCALE = 'zh'
+LANGUAGES = {
+    'en': 'English',
+    'zh': 'Chinese'
+}
+
 # The SQLAlchemy connection string.
 SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
 # SQLALCHEMY_DATABASE_URI = 'mysql://myapp@localhost/myapp'
